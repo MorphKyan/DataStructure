@@ -11,10 +11,10 @@ ListNode::ListNode(){
     next= nullptr;
 }
 
-// ListNode::ListNode(int val){
-//     val=val;
-//     next= nullptr;
-// }
+ListNode::ListNode(int val){
+    val=val;
+    next= nullptr;
+}
 
 int ListNode::getVal() {
     return val;
