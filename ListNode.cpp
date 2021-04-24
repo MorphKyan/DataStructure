@@ -19,3 +19,14 @@ ListNode::ListNode(int val){
 int ListNode::getVal() {
     return val;
 }
+
+void ListNode::traverse_recursion(ListNode *head) {
+    // 访问head
+    traverse_recursion(head->next);
+}
+
+void ListNode::traverse_iterate(ListNode *head) {
+    for(auto p=head;p!= nullptr;p=p->next){
+        // 访问p
+    }
+}

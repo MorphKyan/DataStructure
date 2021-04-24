@@ -11,9 +11,11 @@ public:
     ListNode();
     ListNode(int val);
     int getVal();
+    void traverse_recursion(ListNode* head);
+    void traverse_iterate(ListNode* head);
 
 public:
-    int val;
+    int val{};
     ListNode* next;
 };
 

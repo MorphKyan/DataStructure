@@ -1,0 +1,87 @@
+//
+// Created by morph on 2021/4/24.
+//
+
+// 动态规划三要素：
+// 重叠子问题：好多一样的问题导致了重复计算
+// 解决办法：备忘录（数组、hash）实际上属于剪枝思想
+// 最优子结构：子问题间必须独立，让每个子问题都是最优。例如凑零钱，知道10元以下怎么凑，加一个1元的就知道11元怎么凑了
+// 状态转移方程：状态转移方程直接代表着暴力解法
+// 明确 base case -> 明确「状态」（原问题和子问题中会变化的量）
+// -> 明确「选择」（使状态发生变化的行为） -> 定义 dp 数组/函数的含义
+// 递归算法的时间复杂度怎么计算？就是用子问题个数乘以解决一个子问题需要的时间
+// 自顶向下：从树根向下延申，从一个规模较大的问题向下分解
+// 自底向上：从最简单问题往上推
+// 状态压缩：将DP table缩减到每次状态转移需要的部分
+
+# 伪码框架
+def coinChange(coins: List[int], amount: int):
+
+    # 定义：要凑出金额 n，至少要 dp(n) 个硬币
+    def dp(n):
+        # 做选择，选择需要硬币最少的那个结果
+        for coin in coins:
+            res = min(res, 1 + dp(n - coin))
+        return res
+
+    # 题目要求的最终结果是 dp(amount)
+    return dp(amount)
+
+加上细节
+def coinChange(coins: List[int], amount: int):
+
+    def dp(n):
+        # base case
+        if n == 0: return 0
+        if n < 0: return -1
+        # 求最小值，所以初始化为正无穷
+        res = float('INF')
+        for coin in coins:
+            subproblem = dp(n - coin)
+            # 子问题无解，跳过
+            if subproblem == -1: continue
+            res = min(res, 1 + subproblem)
+
+        return res if res != float('INF') else -1
+
+    return dp(amount)
+
+加上备忘录
+def coinChange(coins: List[int], amount: int):
+    # 备忘录
+    memo = dict()
+    def dp(n):
+        # 查备忘录，避免重复计算
+        if n in memo: return memo[n]
+        # base case
+        if n == 0: return 0
+        if n < 0: return -1
+        res = float('INF')
+        for coin in coins:
+            subproblem = dp(n - coin)
+            if subproblem == -1: continue
+            res = min(res, 1 + subproblem)
+
+        # 记入备忘录
+        memo[n] = res if res != float('INF') else -1
+        return memo[n]
+
+    return dp
+
+自底向上
+int coinChange(vector<int>& coins, int amount) {
+    // 数组大小为 amount + 1，初始值也为 amount + 1
+    vector<int> dp(amount + 1, amount + 1);
+    // base case
+    dp[0] = 0;
+    // 外层 for 循环在遍历所有状态的所有取值
+    for (int i = 0; i < dp.size(); i++) {
+        // 内层 for 循环在求所有选择的最小值
+        for (int coin : coins) {
+            // 子问题无解，跳过
+            if (i - coin < 0) continue;
+            dp[i] = min(dp[i], 1 + dp[i - coin]);
+        }
+    }
+    return (dp[amount] == amount + 1) ? -1 : dp[amount];
+}
