@@ -85,3 +85,12 @@ int coinChange(vector<int>& coins, int amount) {
     }
     return (dp[amount] == amount + 1) ? -1 : dp[amount];
 }
+
+问题转化：最大分数差->求最高分与最低分->再求差
+
+遍历DP的关键点：
+1、遍历的过程中，所需的状态必须是已经计算出来的。
+2、遍历的终点必须是存储结果的那个位置。
+
+要求算法复杂度O(NlogN) 可能用到二分搜索、二叉树等
+要求算法复杂度O(MN) 可能用到回溯算法、二维动态规划
