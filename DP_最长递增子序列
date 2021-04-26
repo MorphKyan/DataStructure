@@ -1,0 +1,49 @@
+最快的是用patience sort 可以达到O(NlogN)
+正常的是N^2
+这里主要说的是如何找到状态转移，用数学归纳法
+方法是从看正在处理i的前面的且小于s[i]的最大值
+比如想要知道第五个的值
+for (int j = 0; j < i; j++) {
+    if (nums[i] > nums[j])
+        dp[i] = max(dp[i], dp[j] + 1);
+}
+
+知道了第五个其实前面，那么前面的怎么知道呢
+for (int i = 0; i < nums.size(); i++) {
+    for (int j = 0; j < i; j++) {
+        if (nums[i] > nums[j])
+            dp[i] = max(dp[i], dp[j] + 1);
+    }
+}
+
+// base case
+dp全都=1;
+
+最后的返回值为dp里面最大的
+
+信封嵌套问题可以转化为最长递增子序列
+把宽度递增排序，如果宽度相同高度递减排序
+因为同样宽度的信封不能互相套下，其实就是不计算同样宽度信封的互相嵌套
+// envelopes = [[w, h], [w, h]...]
+public int maxEnvelopes(int[][] envelopes) {
+    int n = envelopes.length;
+    // 按宽度升序排列，如果宽度一样，则按高度降序排列
+    Arrays.sort(envelopes, new Comparator<int[]>()
+    {
+        public int compare(int[] a, int[] b) {
+            return a[0] == b[0] ?
+                b[1] - a[1] : a[0] - b[0];
+        }
+    });
+    // 对高度数组寻找 LIS
+    int[] height = new int[n];
+    for (int i = 0; i < n; i++)
+        height[i] = envelopes[i][1];
+
+    return lengthOfLIS(height);
+}
+
+最大子数组
+dp定义为以nums[i]为结尾的 最大子数组和
+这里dp有两种选择：与前面合体更大，不合体自己更大（前面和是负的）
+思考：这里是子数组，所以是以nums[i]为结尾的，如果是子序列（当然那个太简单了）就不是这样了
