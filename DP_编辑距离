@@ -1,0 +1,79 @@
+解决两个字符串的动态规划问题，一般都是用两个指针 i,j 分别指向两个字符串的最后，然后一步步往前走，缩小问题的规模
+唯一不同的是，DP table 是自底向上求解，递归解法是自顶向下求解
+
+顺便如果加上记录每步的动作，则可以倒推回去怎么改的
+
+框架
+if s1[i] == s2[j]:
+    啥都别做（skip）
+    i, j 同时向前移动
+else:
+    三选一：
+        插入（insert）
+        删除（delete）
+        替换（replace）
+
+
+int minDistance(string s1, string s2) {
+    return dp(s1, s1.size() - 1, s2, s2.size() - 1);
+}
+
+int dp(string s1, int i, string s2, int j) {
+    // base case
+    if (i == -1) return j + 1;
+    if (j == -1) return i + 1;
+
+    // 相当于拦截了一下
+    if(memo) return memo[i][j];
+
+    // 一样则跳过
+    if (s1[i] == s2[j])
+        // memo[i][j]=
+        return dp(s1, i - 1, s2, j - 1);
+    else {
+        // memo[i][j]=
+        return min(
+                min(
+                        // 在i后面插入一位，这样进行比较的还是i
+                        dp(s1, i, s2, j - 1),
+                        // 删除一位，因为j走完了
+                        dp(s1, i - 1, s2, j)
+                ),
+                // 替换一位，所以匹配上了，同时减
+                dp(s1, i - 1, s2, j - 1)
+        )
+    }
+}
+
+递归代码的优点就是好阅读
+DP table自底向上
+// 自底向上
+int minDistance(string s1, string s2) {
+    vector<vector<int>> dp(s1.size(), vector<int>(s2.size()));
+    // 这个边界条件可以理解为直接添加一堆或删除一堆
+    // base case
+    for (int i = 0; i < s1.size(); ++i) {
+        dp[i][0] = i;
+    }
+    for (int i = 0; i < s2.size(); ++i) {
+        dp[0][i] = i;
+    }
+    // 返回s1[0...i]与s2[0...j]间的最小编辑距离
+    // dp[i-1][j-1]存储 s1[0..i] 和 s2[0..j] 的最小编辑距离
+    for (int i = 1; i < s1.size(); ++i) {
+        for (int j = 1; j <= s2.size(), ++j) {
+            if (s1[i - 1] == s2[j - 1])
+                dp[i][j] = dp[i - 1][j - 1];
+            else {
+                dp[i][j] = min(
+                        min(
+                                dp[i - 1][j] + 1,
+                                dp[i][j - 1] + 1
+                        ),
+                        dp[i - 1][j - 1]
+                )
+            }
+        }
+    }
+    return dp[s1.size()][s2.size()];
+}

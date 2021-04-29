@@ -1,0 +1,57 @@
+这种问题只会问最长，最短当然就是一个字符
+
+第一种思路模板是一个一维的 dp 数组：
+int n = array.length;
+int[] dp = new int[n];
+
+for (int i = 1; i < n; i++) {
+    for (int j = 0; j < i; j++) {
+        dp[i] = 最值(dp[i], dp[j] + ...)
+    }
+}
+
+第二种思路模板是一个二维的 dp 数组：
+int n = arr.length;
+int[][] dp = new dp[n][n];
+
+for (int i = 0; i < n; i++) {
+    for (int j = 1; j < n; j++) {
+        if (arr[i] == arr[j])
+            dp[i][j] = dp[i][j] + ...
+        else
+            dp[i][j] = 最值(...)
+    }
+}
+涉及两个字符串/数组时（最长公共子序列）
+    在子数组arr1[0..i]和子数组arr2[0..j]中，我们要求的子序列（最长公共子序列）长度为dp[i][j]
+只涉及一个字符串/数组（最长回文子序列）
+    在子数组array[i..j]中，我们要求的子序列（最长回文子序列）的长度为dp[i][j]，这时有一半都用不上，dp table是一个上三角
+
+举例：最长回文子序列
+    if (s[i] == s[j])
+        dp[i][j] = dp[i + 1][j - 1] + 2;
+    else
+        // 把左边包进来后最长回文 或 右边包进来最长回文 的最大值
+        dp[i][j] = max(dp[i + 1][j], dp[i][j - 1]);
+这里注意要看左 左下 下 三个位置
+故遍历的顺序要注意
+int longestPalindromeSubseq(string s) {
+    int n = s.size();
+    // dp 数组全部初始化为 0
+    vector<vector<int>> dp(n, vector<int>(n, 0));
+    // base case
+    for (int i = 0; i < n; i++)
+        dp[i][i] = 1;
+    // 反着遍历保证正确的状态转移
+    for (int i = n - 1; i >= 0; i--) {
+        for (int j = i + 1; j < n; j++) {
+            // 状态转移方程
+            if (s[i] == s[j])
+                dp[i][j] = dp[i + 1][j - 1] + 2;
+            else
+                dp[i][j] = max(dp[i + 1][j], dp[i][j - 1]);
+        }
+    }
+    // 整个 s 的最长回文子串长度
+    return dp[0][n - 1];
+}

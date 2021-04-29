@@ -1,0 +1,46 @@
+子序列即可以跳着的
+
+关注点不能是整体字符串，要关注在加入这个字符之后会怎么样
+定义：dp(string s1,int i,string s2,int j)代表s1[i...]与s2[j...]之间的最长子序列为
+所求答案为dp(s1,0,s2,0)
+
+int longestCommonSubsequence(string s1, string s2) {
+    // -1表示没有访问过
+    vector<vector<int>> memo(s1.size(), vector(s2.size(), -1));
+    return dp(s1, 0, s2, 0);
+}
+
+int dp(string s1, int i, string s2, int j) {
+    // base case
+    if (i == s1.size() || j == s2.size()) {
+        return 0;
+    }
+    if (memo[i][j] != -1) {
+        return memo[i][j];
+    }
+    // 在LCS里面
+    if (s1[i] == s2[j]) {
+        memo[i][j] = 1 + dp(s1, i + 1, s2, j + 1);
+        // return 1 + dp(s1, i + 1, s2, j + 1);
+    }
+        // s1[i]不在，s2[j]不在，都不在 取最大值
+    else {
+        memo[i][j] = max(
+                max(
+                        dp(s1, i + 1, s2, j),
+                        dp(s1, i + 1, s2, j),
+                )
+        // 都不在可以不写，因为肯定没有前两种长
+        dp(s1, i + 1, s2, j + 1))
+        // return max(
+        //         max(
+        //                 dp(s1, i + 1, s2, j),
+        //                 dp(s1, i + 1, s2, j),
+        //         )
+        // // 都不在可以不写，因为肯定没有前两种长
+        // dp(s1, i + 1, s2, j + 1))
+    }
+}
+
+同理583字符串的删除操作，其实也是找最长子序列长度
+712 ASCII删除和 dp的部分改为求和

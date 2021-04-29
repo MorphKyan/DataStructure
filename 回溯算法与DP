@@ -1,0 +1,103 @@
+回溯算法框架：同暴力穷举
+def backtrack(路径, 选择列表):
+    if 满足结束条件:
+        result.add(路径)
+        return
+
+    for 选择 in 选择列表:
+        做选择
+        backtrack(路径, 选择列表)
+        撤销选择
+
+LeetCode 494 目标和
+给一串数 中间加+/-号 使其最终和等于target
+
+伪代码思路：
+def backtrack(nums, i):
+    if i == len(nums):
+        if 达到 target:
+            result += 1
+        return
+
+    for op in { +1, -1 }:
+        选择 op * nums[i]
+        # 穷举 nums[i + 1] 的选择
+        backtrack(nums, i + 1)
+        撤销选择
+
+实际代码：
+int result = 0;
+/* 主函数 */
+int findTargetSumWays(int[] nums, int target) {
+    if (nums.length == 0) return 0;
+    backtrack(nums, 0, target);
+    return result;
+}
+
+/* 回溯算法模板 */
+void backtrack(int[] nums, int i, int rest) {
+    // base case
+    if (i == nums.length) {
+        if (rest == 0) {
+            // 说明恰好凑出 target
+            result++;
+        }
+        return;
+    }
+    // 给 nums[i] 选择 - 号
+    rest += nums[i];
+    // 穷举 nums[i + 1]
+    backtrack(nums, i + 1, rest);
+    // 撤销选择
+    rest -= nums[i];
+
+    // 给 nums[i] 选择 + 号
+    rest -= nums[i];
+    // 穷举 nums[i + 1]
+    backtrack(nums, i + 1, rest);
+    // 撤销选择
+    rest += nums[i];
+}
+
+一眼看出重叠子问题的方法：抽象出递归框架
+void backtrack(int i, int rest) {
+    backtrack(i + 1, rest - nums[i]);
+    backtrack(i + 1, rest + nums[i]);
+}
+当nums[i]=0时，两句话就一样了
+故可以使用备忘录
+这时还有一个技巧
+就是把参数i和rest转化为字符串作为hash的key
+int findTargetSumWays(int[] nums, int target) {
+    if (nums.length == 0) return 0;
+    return dp(nums, 0, target);
+}
+
+// 备忘录
+HashMap<String, Integer> memo = new HashMap<>();
+int dp(int[] nums, int i, int rest) {
+    // base case
+    if (i == nums.length) {
+        if (rest == 0) return 1;
+        return 0;
+    }
+    // 把它俩转成字符串才能作为哈希表的键
+    String key = i + "," + rest;
+    // 避免重复计算
+    if (memo.containsKey(key)) {
+        return memo.get(key);
+    }
+    // 还是穷举
+    int result = dp(nums, i + 1, rest - nums[i]) + dp(nums, i + 1, rest + nums[i]);
+    // 记入备忘录
+    memo.put(key, result);
+    return result;
+}
+
+这题用动态规划可以变成子集划分问题，A B分别为前面为+和-的两个集合
+sum(A) - sum(B) = target
+sum(A) = target + sum(B)
+sum(A) + sum(A) = target + sum(B) + sum(A)
+可得出
+2 * sum(A) = target + sum(nums)
+变成了背包问题，后面不细说了
