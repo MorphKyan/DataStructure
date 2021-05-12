@@ -9,40 +9,17 @@
 
 using namespace std;
 
-class RandomizedSet {
-public:
-    vector<int> nums;
-    unordered_map<int, int> valToIdx;
-
-    bool insert(int val) {
-        // 存在
-        if (valToIdx.count(val)) {
-            return false;
+// 索引从1开始，W是重量，n是物品
+int backPack(int m, int n, vector<int> &prices, vector<int> &val) {
+    vector<vector<vector<int>>> dp(m, vector<vector<int>>(n, vector<int>(2, 0)));
+    // 不动，卖出
+    for (int k = 1; k < max_k; ++k) {
+        if (i - 1 = -1) {
+            // 处理base case
         }
-        // 不存在，插入
-        valToIdx[val] = nums.size();
-        nums.push_back(val);
-        return true;
+        dp[i][k][0] = max(dp[i - 1][k][0], dp[i - 1][k][1] + prices[i]);
+        dp[i][k][1] = max(dp[i - 1][k][1], dp[i - 1][k - 1][0] - prices[i]);
     }
-
-    bool remove(int val) {
-        // 不存在
-        if (!valToIdx.count(val)) {
-            return false;
-        }
-        // 存在，删除
-        int idx = valToIdx[val];
-        // 删除val索引
-        valToIdx.erase(val);
-        // 要删除的换到结尾，并删除
-        swap(nums[idx], nums.back());
-        nums.pop_back();
-        // 换过来的末尾元素，修改map索引
-        valToIdx[nums[idx]] = idx;
-        return true;
-    }
-
-    int getRandom() {
-        return nums[rand() % nums.size()];
-    }
-};
+    dp[-1][k][b] = 0;
+    dp[i][0][b] = 0;
+}
