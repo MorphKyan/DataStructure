@@ -1,3 +1,33 @@
+贪心算法一般解决存在重叠区间的问题
+比如：区间中最多有几个互不相交的区间，最少删除多少区间使剩余区间互不重叠等
+
+思路分为四步：
+1.根据区间结尾排序（为了提升速度）
+2.找区间结束最早的
+3.把相交的区间都删除
+4.重复2，3步直到不存在重复
+
+int intervalSchedule(vector<vector<int>> intvs) {
+    if (intvs.size() == 0) return 0;
+    // 升序排序
+    sort(intvs.begin(), intvs.end(), [](vector<int> &x, vector<int> &y) {
+        return x[1] < y[1];
+    });
+    // 至少有一个不相交
+    int count = 1;
+
+    int x_end = intvs[0][1];
+    for (auto interval:intvs) {
+        int start = interval[0];
+        // 找到了下一个区间，这里>=可以修改，如果是边界相同也算重叠就去掉=
+        if (start >= x_end) {
+            count++;
+            x_end = interval[1];
+        }
+    }
+    return count;
+}
+
 // 这是第二类典型的，看能走多远的问题
 
 int jump(vector<int> &nums) {
