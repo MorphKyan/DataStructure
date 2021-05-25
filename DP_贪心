@@ -1,7 +1,4 @@
-#include <iostream>
-#include <vector>
-
-using namespace std;
+// 这是第二类典型的，看能走多远的问题
 
 int jump(vector<int> &nums) {
     int n = nums.size();
@@ -19,9 +16,4 @@ int jump(vector<int> &nums) {
         }
     }
     return jumps;
-}
-
-int main() {
-
-    return 0;
 }
