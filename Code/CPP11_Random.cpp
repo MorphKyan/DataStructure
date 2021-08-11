@@ -27,7 +27,7 @@ int main1() {
     uniform_real_distribution<double> dis(-1, 1);
 
     // 合成函数的模板 bind()
-    auto randfun = bind(dis, gen);
+    auto rand_fun = bind(dis, gen);
 
-    cout << randfun() << " " << randfun() << endl;
+    cout << rand_fun() << " " << rand_fun() << endl;
 }
