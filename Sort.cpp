@@ -41,15 +41,15 @@ void bubbleSort(T arr[]) {
     }
 }
 
-auto selectionSort(T arr[]){
-    int minIdx=0;
-    for(int i=0;i<arr.size();++i){
-        minIdx=i;
-        for(int j=i+1;j<arr.size();j++){
-            if(arr[j]>arr[i]){
-                minIdx=j;
+void selectionSort(vector<int> &nums) {
+    int minIdx = 0;
+    for (int i = 0; i < nums.size(); ++i) {
+        minIdx = i;
+        for (int j = i + 1; j < nums.size(); ++j) {
+            if (nums[j] < nums[minIdx]) {
+                minIdx = j;
             }
         }
-        swap(arr[i],arr[j]);
+        swap(nums[i], nums[minIdx]);
     }
 }
