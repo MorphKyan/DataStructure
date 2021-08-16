@@ -28,7 +28,7 @@ int dp(string s1, int i, string s2, int j) {
         memo[i][j] = max(
                 max(
                         dp(s1, i + 1, s2, j),
-                        dp(s1, i + 1, s2, j),
+                        dp(s1, 1, s2, j + 1),
                 )
         // 都不在可以不写，因为肯定没有前两种长
         dp(s1, i + 1, s2, j + 1))
@@ -44,11 +44,6 @@ int dp(string s1, int i, string s2, int j) {
 
 同理583字符串的删除操作，其实也是找最长子序列长度
 712 ASCII删除和 dp的部分改为求和
-
-最长子串
-s1[i] == s2[j]时不变
-else里面改成
-memo[i][j] = 0;
 
 如果需要输出最长子串，可以加一个最大值记录，当前值比最大值大的时候，记录对应i,j
 dp完成后，向右下方找>0的值，顺序加入string中，直到memo[i][j]=0;
