@@ -2,7 +2,7 @@
 选择为 去哪层扔
 最外层for 理解为开始有10层楼，不知道去哪里扔，所以都试一遍看哪种情况下的最坏情况最小
 
-// 任意类型pair的hash方法
+// 任意类型pair的hash方法，重载()
 struct hash_pair {
     template<class T1, class T2>
     size_t operator()(const pair<T1, T2> &p) const {
