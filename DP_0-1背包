@@ -14,10 +14,8 @@ int backPack(int w, int n, vector<int> &wt, vector<int> &val) {
             );
         }
     }
-    return dp[n][w]
+    return dp[n][w];
 }
-
-重点在放的时候的dp处理
 
 重点在放的时候的dp处理
 
